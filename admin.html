@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Управление вишлистом</title>
+  <link rel="stylesheet" href="styles.css?v=admin-1">
+  <link rel="stylesheet" href="admin.css?v=1">
+  <script src="config.js" defer></script>
+  <script src="admin.js?v=1" defer></script>
+</head>
+<body>
+  <main class="admin-shell">
+    <header class="admin-header"><div><a href="./">Вернуться к вишлисту</a><h1>Управление вишлистом</h1></div><button id="logout" hidden>Выйти</button></header>
+    <p id="admin-status" role="status"></p>
+    <section id="login-panel">
+      <form id="login-form" class="admin-panel">
+        <h2>Вход администратора</h2>
+        <label>Почта<input id="email" type="email" autocomplete="email" required></label>
+        <button type="submit">Получить письмо для входа</button>
+        <p>Откройте ссылку из письма. Если в письме есть код, введите его ниже.</p>
+      </form>
+      <form id="code-form" class="admin-panel" hidden>
+        <label>Код из письма<input id="otp" autocomplete="one-time-code" inputmode="numeric" required></label>
+        <button type="submit">Войти по коду</button>
+      </form>
+    </section>
+    <section id="workspace" hidden>
+      <div class="admin-toolbar"><button id="new-gift">Добавить товар</button><button id="import-market">Проверить подборку Маркета</button><button id="publish">Опубликовать изменения</button></div>
+      <p id="draft-status">Изменения появятся у гостей после публикации.</p>
+      <section id="import-preview" class="admin-panel" hidden></section>
+      <form id="gift-form" class="admin-panel" hidden>
+        <h2 id="form-title">Товар</h2>
+        <label>Название<input id="gift-name" maxlength="200" required></label>
+        <label>Описание<textarea id="gift-description" maxlength="2000" rows="3"></textarea></label>
+        <label>Фото<input id="gift-image" type="url" placeholder="https://…" required></label>
+        <label>Ссылка на товар<input id="gift-url" type="url" placeholder="https://…" required></label>
+        <label>Магазин<input id="gift-store" maxlength="100" required></label>
+        <label>Категория<select id="gift-category"></select></label>
+        <label>Новая категория, если нужна<input id="new-category" maxlength="80"></label>
+        <p>В одной категории можно занять один вариант подарка.</p>
+        <div class="admin-toolbar"><button type="submit">Сохранить в черновик</button><button type="button" id="cancel-edit">Закрыть</button></div>
+      </form>
+      <div id="admin-products"></div>
+    </section>
+  </main>
+</body>
+</html>

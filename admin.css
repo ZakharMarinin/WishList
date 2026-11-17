@@ -1,0 +1,26 @@
+.admin-shell { max-width: 860px; margin: auto; padding: 24px 20px 60px; }
+.admin-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 24px; }
+.admin-header h1 { font-size: clamp(24px, 5vw, 32px); letter-spacing: -.035em; margin-top: 12px; }
+.admin-shell h2 { font-size: 20px; }
+.admin-shell a { color: #2567ad; }
+.admin-shell button { min-height: 44px; padding: 10px 16px; border: 1px solid #d8dde3; border-radius: 12px; background: white; color: #202124; }
+.admin-shell button:disabled { opacity: .5; cursor: wait; }
+#publish, #login-form button, #gift-form button[type="submit"] { background: #202124; color: white; border-color: #202124; }
+.admin-toolbar { display: flex; flex-wrap: wrap; gap: 8px; }
+.admin-panel { background: white; border: 1px solid #e9ebef; border-radius: 20px; padding: 20px; display: grid; gap: 16px; margin: 16px 0; }
+.admin-panel p, #draft-status { font-size: 14px; color: #656970; }
+.admin-shell label { display: grid; gap: 6px; font-size: 14px; font-weight: 600; }
+.admin-shell input, .admin-shell textarea, .admin-shell select { width: 100%; min-height: 44px; padding: 10px 12px; font: inherit; border: 1px solid #cbd1da; border-radius: 10px; background: white; color: #202124; }
+.admin-shell input:focus-visible, .admin-shell textarea:focus-visible, .admin-shell select:focus-visible { outline: 2px solid #2675df; outline-offset: 2px; }
+#admin-status:not(:empty) { padding: 14px; margin-bottom: 16px; border-radius: 12px; background: #e8eef7; }
+#draft-status { margin-top: 12px; }
+.admin-product { display: flex; align-items: center; gap: 16px; padding: 16px 0; border-bottom: 1px solid #e0e4eb; }
+.admin-product img { width: 64px; height: 80px; object-fit: cover; border-radius: 10px; }
+.admin-product .product-copy { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.admin-product p { font-size: 13px; color: #656970; }
+.admin-product .admin-toolbar { flex-shrink: 0; }
+@media (max-width: 540px) {
+  .admin-product { flex-wrap: wrap; }
+  .admin-product .admin-toolbar { width: 100%; }
+  .admin-header { align-items: flex-start; }
+}

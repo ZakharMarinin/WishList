@@ -11,6 +11,8 @@ const cards = new Map();
 const demoBookings = new Set();
 let activeCategory = '';
 let bookings = new Map();
+let categoryBookings = new Map();
+let catalogRevision = null;
 let ready = demo;
 let reading = false;
 let pendingGift = '';
@@ -97,6 +99,9 @@ function enableFilterScrolling() {
 }
 
 function buildCatalog() {
+  filters.replaceChildren();
+  grid.replaceChildren();
+  cards.clear();
   const categories = [{ id: '', label: 'Все' }, ...catalog.categories];
   for (const { id, label } of categories) {
     const button = element('button', label, 'filter');
@@ -186,9 +191,9 @@ function render() {
   grid.setAttribute('aria-busy', String(!ready && reading));
 
   for (const [id, { gift, card, status, button }] of cards) {
-    const selected = catalog.gifts.find((item) => item.category === gift.category && bookings.has(item.id));
+    const selected = categoryBookings.get(gift.category);
     const taken = Boolean(selected);
-    const alternative = taken && selected.id !== id;
+    const alternative = taken && selected !== id;
     const mine = bookings.get(id) === true;
     const pending = pendingGift === id;
     card.hidden = Boolean(activeCategory && gift.category !== activeCategory);
@@ -212,9 +217,18 @@ async function refresh({ afterChange = false } = {}) {
   reading = true;
   render();
   try {
-    const rows = await rpc('wishlist_status', { p_token: tokenForBrowser() });
+    const updatedCatalog = await rpc('wishlist_catalog', {});
+    const rows = await rpc('wishlist_status_v2', { p_token: tokenForBrowser() });
     if (requestVersion !== version) return;
+    if (updatedCatalog.revision !== catalogRevision) {
+      catalog.categories = updatedCatalog.categories;
+      catalog.gifts = updatedCatalog.gifts;
+      catalogRevision = updatedCatalog.revision;
+      if (!catalog.categories.some((category) => category.id === activeCategory)) activeCategory = '';
+      buildCatalog();
+    }
     bookings = new Map(rows.map(({ gift_id, mine }) => [gift_id, mine]));
+    categoryBookings = new Map(rows.map(({ gift_id, category_id }) => [category_id, gift_id]));
     ready = true;
     issue = '';
   } catch {
@@ -244,6 +258,7 @@ async function changeBooking(gift) {
       if (release) demoBookings.delete(gift.id);
       else demoBookings.add(gift.id);
       bookings = new Map(Array.from(demoBookings, (id) => [id, true]));
+      categoryBookings = new Map(catalog.gifts.filter((item) => bookings.has(item.id)).map((item) => [item.category, item.id]));
     } else {
       const ok = await rpc(release ? 'wishlist_release' : 'wishlist_claim', {
         p_gift_id: gift.id,
@@ -265,7 +280,7 @@ async function changeBooking(gift) {
   } finally {
     if (!demo) await refresh({ afterChange: true });
     if (claimRejected) {
-      const selected = catalog.gifts.find((item) => item.category === gift.category && bookings.has(item.id));
+      const selected = categoryBookings.get(gift.category);
       feedback.textContent = ready && selected
         ? 'В этой категории уже выбрали подарок.'
         : 'Не удалось занять подарок. Владельцу нужно проверить каталог и брони категории в Supabase.';
