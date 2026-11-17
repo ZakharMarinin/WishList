@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Подарки, которым мы будем рады на новоселье.">
+  <meta name="theme-color" content="#f7f8fa">
+  <title>Вишлист на новоселье</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="gifts.js" defer></script>
+  <script src="config.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <main class="shell">
+    <section class="catalog" aria-labelledby="catalog-title">
+      <div class="catalog-intro"><h1 id="catalog-title">Наш вишлист</h1><p>Выберите один вариант в категории. Остальные закроются для всех.</p></div>
+      <div class="catalog-heading">
+        <div id="filters" class="filters" role="group" aria-label="Категории подарков"></div>
+      </div>
+      <noscript><p class="notice">Включите JavaScript, чтобы увидеть подарки и их статусы.</p></noscript>
+      <p id="notice" class="notice" hidden></p>
+      <button id="retry" type="button" class="retry" hidden>Обновить статусы</button>
+      <div id="gifts" class="gift-grid" aria-busy="true"></div>
+      <p id="feedback" class="toast" role="status"></p>
+    </section>
+  </main>
+</body>
+</html>
+
