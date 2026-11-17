@@ -1,5 +1,7 @@
 const catalog = {
   categories: [
+    { id: 'slicers', label: 'Овощерезки' },
+    { id: 'spices', label: 'Наборы специй' },
     { id: 'glasses', label: 'Стаканы' },
     { id: 'basket', label: 'Корзины' },
     { id: 'sugar', label: 'Сахарницы' },
@@ -12,6 +14,24 @@ const catalog = {
     { id: 'seasoning', label: 'Солонки и перечницы' },
   ],
   gifts: [
+    {
+      id: 'ym-103590699384', category: 'slicers', name: 'Овощерезка Veggie Slicer',
+      description: 'Многофункциональный слайсер 14 в 1 с контейнером.',
+      image: 'https://avatars.mds.yandex.net/get-mpic/20308035/2a0000019fdc7cdc5867925b283e3f0254cb/180x240_multiply',
+      stores: [{ name: 'Яндекс Маркет', url: 'https://market.yandex.ru/card/ovoshcherezka-veggie-slicer-slayser-s-konteynerom-14-v-1/103590699384' }],
+    },
+    {
+      id: 'ym-4769356990', category: 'slicers', name: 'Овощерезка Nicer Dicer Plus',
+      description: 'Второй вариант овощерезки — достаточно одной из двух.',
+      image: 'https://avatars.mds.yandex.net/get-mpic/21131268/picecd31a3869b26e368eb52e4a83a5aaa2/180x240_multiply',
+      stores: [{ name: 'Яндекс Маркет', url: 'https://market.yandex.ru/card/ovoshcherezka-nicer-dicer-plus/4769356990' }],
+    },
+    {
+      id: 'ym-102038875871', category: 'spices', name: 'Набор специй Kooh',
+      description: '16 видов специй на подставке.',
+      image: 'https://avatars.mds.yandex.net/get-mpic/20793833/pic23e1729fc3a59915a7ef8f2d4a5e1833/180x240_multiply',
+      stores: [{ name: 'Яндекс Маркет', url: 'https://market.yandex.ru/card/pripravy-i-spetsii-kooh-podarochnyy-nabor-na-podstavke-iz-16-vidov--podarok-muzhchine-i-zhenshchine-mame-podruge-i-babushke-na-den-rozhdeniya/102038875871' }],
+    },
     {
       id: 'ym-6118927806', category: 'basket', name: 'Бамбуковые корзины',
       description: 'Набор корзин цвета светлого дерева.',

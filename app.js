@@ -35,7 +35,10 @@ async function rpc(name, args) {
     body: JSON.stringify(args),
     signal: AbortSignal.timeout(8000),
   });
-  if (!response.ok) throw new Error(`Supabase HTTP ${response.status}`);
+  if (!response.ok) {
+    const details = await response.json().catch(() => ({}));
+    throw new Error(details.message || `Supabase HTTP ${response.status}`);
+  }
   return response.json();
 }
 
@@ -185,6 +188,7 @@ async function changeBooking(gift) {
   clearTimeout(feedbackTimer);
   feedback.textContent = '';
   pendingGift = gift.id;
+  let claimRejected = false;
   version++;
   render();
 
@@ -199,17 +203,26 @@ async function changeBooking(gift) {
         p_token: tokenForBrowser(),
       });
       if (!ok) {
-        feedback.textContent = release ? 'Эта бронь уже изменилась.' : 'В этой категории уже выбрали подарок.';
+        claimRejected = !release;
+        feedback.textContent = release ? 'Эта бронь уже изменилась.' : '';
         return;
       }
       if (release) bookings.delete(gift.id);
       else bookings.set(gift.id, true);
     }
     feedback.textContent = release ? 'Бронь снята.' : `«${gift.name}» теперь за вами.`;
-  } catch {
-    feedback.textContent = 'Не удалось подтвердить действие. Проверяем текущий статус.';
+  } catch (error) {
+    feedback.textContent = error.message === 'wishlist_unknown_gift'
+      ? 'Товар ещё не подключён к бронированию. Владельцу нужно обновить каталог в Supabase.'
+      : 'Не удалось подтвердить действие. Проверяем текущий статус.';
   } finally {
     if (!demo) await refresh({ afterChange: true });
+    if (claimRejected) {
+      const selected = catalog.gifts.find((item) => item.category === gift.category && bookings.has(item.id));
+      feedback.textContent = ready && selected
+        ? 'В этой категории уже выбрали подарок.'
+        : 'Не удалось занять подарок. Владельцу нужно проверить каталог и брони категории в Supabase.';
+    }
     pendingGift = '';
     render();
     feedbackTimer = setTimeout(() => { feedback.textContent = ''; }, 5000);

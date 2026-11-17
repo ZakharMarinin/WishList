@@ -23,6 +23,9 @@ where gift_id in ('kettle', 'glasses', 'glasses-tall', 'basket', 'plant', 'blank
 delete from wishlist_private.gifts
 where gift_id in ('kettle', 'glasses', 'glasses-tall', 'basket', 'plant', 'blanket', 'candle');
 insert into wishlist_private.gifts (gift_id, category_id) values
+  ('ym-103590699384', 'slicers'),
+  ('ym-4769356990', 'slicers'),
+  ('ym-102038875871', 'spices'),
   ('ym-6118927806', 'basket'),
   ('ym-5129769206', 'sugar'),
   ('ym-5433285505', 'sugar'),
@@ -80,7 +83,9 @@ begin
 
   token_hash := sha256(decode(p_token, 'hex'));
   select category_id into selected_category from wishlist_private.gifts where gift_id = p_gift_id;
-  if selected_category is null then return false; end if;
+  if selected_category is null then
+    raise exception 'wishlist_unknown_gift' using errcode = '22023';
+  end if;
 
   insert into wishlist_private.bookings (gift_id, owner_hash, category_id)
   values (p_gift_id, token_hash, selected_category)
