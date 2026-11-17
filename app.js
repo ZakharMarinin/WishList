@@ -51,6 +51,7 @@ function element(tag, content, className) {
 
 function enableFilterScrolling() {
   let drag = null;
+  let suppressClick = false;
 
   filters.addEventListener('wheel', (event) => {
     if (event.ctrlKey || filters.scrollWidth <= filters.clientWidth) return;
@@ -61,16 +62,26 @@ function enableFilterScrolling() {
     if (filters.scrollLeft !== previous) event.preventDefault();
   }, { passive: false });
 
-  filters.addEventListener('contextmenu', (event) => event.preventDefault());
-  filters.addEventListener('pointerdown', (event) => {
-    if (event.pointerType !== 'mouse' || event.button !== 2) return;
+  filters.addEventListener('click', (event) => {
+    if (!suppressClick || event.detail === 0) return;
     event.preventDefault();
+    event.stopImmediatePropagation();
+    suppressClick = false;
+  }, { capture: true });
+  filters.addEventListener('pointerdown', (event) => {
+    suppressClick = false;
+    if (event.pointerType !== 'mouse' || event.button !== 0) return;
     drag = { pointerId: event.pointerId, x: event.clientX, scrollLeft: filters.scrollLeft };
-    filters.setPointerCapture(event.pointerId);
-    filters.classList.add('is-dragging');
   });
   filters.addEventListener('pointermove', (event) => {
     if (!drag || event.pointerId !== drag.pointerId) return;
+    if (!suppressClick && Math.abs(drag.x - event.clientX) < 5) return;
+    if (!suppressClick) {
+      suppressClick = true;
+      filters.setPointerCapture(event.pointerId);
+      filters.classList.add('is-dragging');
+    }
+    event.preventDefault();
     filters.scrollLeft = drag.scrollLeft + drag.x - event.clientX;
   });
   const stopDragging = (event) => {
