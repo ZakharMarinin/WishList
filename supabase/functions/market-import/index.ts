@@ -1,4 +1,5 @@
 // Deploy as market-import. Authentication is checked through Supabase Auth and the admin RPC.
+import { load } from 'npm:cheerio@1.0.0';
 const allowedOrigin = 'https://zakharmarinin.github.io';
 const headers = {
   'Access-Control-Allow-Origin': allowedOrigin,
@@ -40,8 +41,35 @@ Deno.serve(async (request) => {
     }).filter((value) => value['@type'] === 'ItemList');
     const list = lists.find((value) => Array.isArray(value.itemListElement)
       && Number(value.numberOfItems) > 0 && Number(value.numberOfItems) === value.itemListElement.length);
-    if (!list) return json({ message: 'Маркет не передал полный список товаров для импорта. Добавьте товар вручную. Каталог сохранён.' }, 422);
-    const gifts = list.itemListElement.map((entry: Record<string, any>) => {
+    let items = list?.itemListElement;
+    if (!items) {
+      const $ = load(html);
+      $('script, style, noscript').remove();
+      const text = $('body').text().replace(/\s+/g, ' ');
+      const expected = Number(text.match(/(?:^|[^\d])(\d+)\s*товар(?:ов|а)?(?:\s|$)/i)?.[1]);
+      const products = new Map<string, { url: string; name: string; image: string }>();
+      $('a[href*="/card/"]').each((_, element) => {
+        const anchor = $(element);
+        const image = anchor.find('img').first();
+        if (!image.length) return;
+        let parent = anchor.parent();
+        for (let depth = 0; depth < 6 && parent.length; depth++, parent = parent.parent()) {
+          const titles = parent.find('[data-auto="snippet-title"]');
+          if (titles.length > 1) break;
+          if (titles.length !== 1) continue;
+          const url = new URL(anchor.attr('href')!, sourceUrl);
+          const id = url.pathname.match(/^\/card\/[^/]+\/(\d+)/)?.[1];
+          const src = image.attr('src') || image.attr('data-src');
+          if (id && src && titles.text().trim()) {
+            products.set(id, { url: url.href, name: titles.text().trim(), image: new URL(src, sourceUrl).href });
+          }
+          break;
+        }
+      });
+      if (expected > 0 && expected === products.size) items = [...products.values()];
+    }
+    if (!items) return json({ message: 'Не удалось прочитать полную подборку Маркета. Добавьте товар вручную или повторите позже. Каталог сохранён.' }, 422);
+    const gifts = items.map((entry: Record<string, any>) => {
       const item = entry.item || entry;
       const url = new URL(item.url);
       const id = url.pathname.match(/^\/card\/[^/]+\/(\d+)/)?.[1];

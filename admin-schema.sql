@@ -97,7 +97,8 @@ begin
       details = excluded.details, active = true, position = excluded.position;
     item_position := item_position + 1;
   end loop;
-  update wishlist_private.catalog_state set categories = p_catalog->'categories', revision = revision + 1;
+  update wishlist_private.catalog_state set categories = p_catalog->'categories', revision = revision + 1
+  where singleton = true;
   return current_revision + 1;
 end;
 $$;
