@@ -49,6 +49,42 @@ function element(tag, content, className) {
   return node;
 }
 
+function enableFilterScrolling() {
+  let drag = null;
+
+  filters.addEventListener('wheel', (event) => {
+    if (event.ctrlKey || filters.scrollWidth <= filters.clientWidth) return;
+    const delta = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
+    const unit = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? filters.clientWidth : 1;
+    const previous = filters.scrollLeft;
+    filters.scrollLeft += delta * unit;
+    if (filters.scrollLeft !== previous) event.preventDefault();
+  }, { passive: false });
+
+  filters.addEventListener('contextmenu', (event) => event.preventDefault());
+  filters.addEventListener('pointerdown', (event) => {
+    if (event.pointerType !== 'mouse' || event.button !== 2) return;
+    event.preventDefault();
+    drag = { pointerId: event.pointerId, x: event.clientX, scrollLeft: filters.scrollLeft };
+    filters.setPointerCapture(event.pointerId);
+    filters.classList.add('is-dragging');
+  });
+  filters.addEventListener('pointermove', (event) => {
+    if (!drag || event.pointerId !== drag.pointerId) return;
+    filters.scrollLeft = drag.scrollLeft + drag.x - event.clientX;
+  });
+  const stopDragging = (event) => {
+    if (!drag || event.pointerId !== drag.pointerId) return;
+    const pointerId = drag.pointerId;
+    drag = null;
+    if (filters.hasPointerCapture(pointerId)) filters.releasePointerCapture(pointerId);
+    filters.classList.remove('is-dragging');
+  };
+  filters.addEventListener('pointerup', stopDragging);
+  filters.addEventListener('pointercancel', stopDragging);
+  filters.addEventListener('lostpointercapture', stopDragging);
+}
+
 function buildCatalog() {
   const categories = [{ id: '', label: 'Все' }, ...catalog.categories];
   for (const { id, label } of categories) {
@@ -231,6 +267,7 @@ async function changeBooking(gift) {
 
 if (!demo && !configured) issue = 'Для бронирования необходимо завершить настройку страницы.';
 buildCatalog();
+enableFilterScrolling();
 render();
 retry.addEventListener('click', () => refresh());
 if (configured) {
