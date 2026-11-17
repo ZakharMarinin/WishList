@@ -1,11 +1,7 @@
 const catalog = {
   categories: [
-    { id: 'kettle', label: 'Чайники' },
     { id: 'glasses', label: 'Стаканы' },
     { id: 'basket', label: 'Корзины' },
-    { id: 'plant', label: 'Кашпо' },
-    { id: 'blanket', label: 'Пледы' },
-    { id: 'candle', label: 'Свечи' },
     { id: 'sugar', label: 'Сахарницы' },
     { id: 'towels', label: 'Кухонные полотенца' },
     { id: 'plates', label: 'Тарелки' },
@@ -111,47 +107,6 @@ const catalog = {
       description: 'Две ёмкости на подставке.',
       image: 'https://avatars.mds.yandex.net/get-mpic/17710693/2a0000019e8ce6cbf682fbce23ccaedcee3c/180x240_multiply',
       stores: [{ name: 'Яндекс Маркет', url: 'https://market.yandex.ru/card/solonka-i-perechnitsa-bellatenero/103186726114' }],
-    },
-    {
-      id: 'kettle', category: 'kettle', icon: '🫖', name: 'Чайник',
-      image: 'https://img.ep-cdn.com/i/500/500/vm/vmgwaqucbtzfdlisxprk/bredemeijer-stakleni-cajnik-s-cjediljkom-minuet-santhee-500-ml-cene.jpg',
-      description: 'Заварочный, с ситечком. Чтобы наливать чай всем за столом.',
-      stores: [{ name: 'Ozon', url: 'https://www.ozon.ru/search/?text=заварочный+чайник+с+ситечком' }],
-    },
-    {
-      id: 'glasses', category: 'glasses', icon: '🥛', name: 'Набор стаканов',
-      image: 'https://cdn.mafrservices.com/pim-content/QAT/media/product/1055453/1767714600/1055453_main.jpg?im=Resize%3D400',
-      description: 'Четыре простых прозрачных стакана для воды и лимонада.',
-      stores: [{ name: 'Яндекс Маркет', url: 'https://market.yandex.ru/search?text=набор+прозрачных+стаканов' }],
-    },
-    {
-      id: 'glasses-tall', category: 'glasses', icon: '🥛', name: 'Высокие стаканы',
-      description: 'Альтернатива обычному набору. Достаточно одного из двух вариантов.',
-      stores: [{ name: 'Ozon', url: 'https://www.ozon.ru/search/?text=высокие+стаканы' }],
-    },
-    {
-      id: 'basket', category: 'basket', icon: '🧺', name: 'Плетёная корзина',
-      image: 'https://rackhams.com/image/medium/e4c03582-4ea5-4ec4-ac04-32d4cc557ce4.jpg',
-      description: 'Для пледов и мелочей, которые пока не нашли своё место.',
-      stores: [{ name: 'Ozon', url: 'https://www.ozon.ru/search/?text=плетеная+корзина+для+хранения' }],
-    },
-    {
-      id: 'plant', category: 'plant', icon: '🪴', name: 'Кашпо',
-      image: 'https://cdn.rona.ca/images/69875310_L.jpg',
-      description: 'Керамическое, диаметром около 14 см. На подоконнике есть место.',
-      stores: [{ name: 'Яндекс Маркет', url: 'https://market.yandex.ru/search?text=керамическое+кашпо+14+см' }],
-    },
-    {
-      id: 'blanket', category: 'blanket', icon: '🧶', name: 'Плед',
-      image: 'https://www.jysk.ca/media/catalog/product/k/r/krattifiol-beige-throw-blanket-oversized.jpg',
-      description: 'Мягкий однотонный плед, чтобы укрыться на диване.',
-      stores: [{ name: 'Ozon', url: 'https://www.ozon.ru/search/?text=мягкий+однотонный+плед' }],
-    },
-    {
-      id: 'candle', category: 'candle', icon: '🕯️', name: 'Свеча',
-      image: 'https://www.yummicandles.ca/cdn/shop/products/handy-jar-candles_jpg_03f2eff4-100a-40ab-90b9-8a895388b3d9.jpg?v=1662144997',
-      description: 'Без аромата, в небольшом стеклянном стакане.',
-      stores: [{ name: 'Яндекс Маркет', url: 'https://market.yandex.ru/search?text=свеча+без+аромата+в+стакане' }],
     },
   ],
 };

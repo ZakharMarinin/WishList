@@ -17,9 +17,12 @@ create table if not exists wishlist_private.gifts (
   category_id text not null
 );
 revoke all on table wishlist_private.gifts from public, anon, authenticated;
+-- Remove the original sample products and their test bookings.
+delete from wishlist_private.bookings
+where gift_id in ('kettle', 'glasses', 'glasses-tall', 'basket', 'plant', 'blanket', 'candle');
+delete from wishlist_private.gifts
+where gift_id in ('kettle', 'glasses', 'glasses-tall', 'basket', 'plant', 'blanket', 'candle');
 insert into wishlist_private.gifts (gift_id, category_id) values
-  ('kettle', 'kettle'), ('glasses', 'glasses'), ('glasses-tall', 'glasses'),
-  ('basket', 'basket'), ('plant', 'plant'), ('blanket', 'blanket'), ('candle', 'candle'),
   ('ym-6118927806', 'basket'),
   ('ym-5129769206', 'sugar'),
   ('ym-5433285505', 'sugar'),
