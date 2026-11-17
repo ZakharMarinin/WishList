@@ -1,0 +1,3 @@
+[functions.market-import]
+# The handler validates the user's JWT and admin permission through Supabase.
+verify_jwt = false
